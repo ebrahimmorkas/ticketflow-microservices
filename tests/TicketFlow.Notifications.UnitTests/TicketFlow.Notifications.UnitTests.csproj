@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TicketFlow.Notifications.Worker\TicketFlow.Notifications.Worker.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -14,6 +14,9 @@ var messaging = builder.AddRabbitMQ("messaging")
     .WithManagementPlugin()
     .WithLifetime(ContainerLifetime.Persistent);
 
+// Local SMTP server with a web inbox for viewing the emails the platform sends.
+var mailpit = builder.AddMailPit("mailpit");
+
 // ---------- services ----------
 builder.AddProject<Projects.TicketFlow_Events_Api>("events-api")
     .WithReference(eventsDb)
@@ -32,5 +35,11 @@ builder.AddProject<Projects.TicketFlow_Payments_Api>("payments-api")
     .WithReference(messaging)
     .WaitFor(paymentsDb)
     .WaitFor(messaging);
+
+builder.AddProject<Projects.TicketFlow_Notifications_Worker>("notifications-worker")
+    .WithReference(messaging)
+    .WithReference(mailpit)
+    .WaitFor(messaging)
+    .WaitFor(mailpit);
 
 builder.Build().Run();

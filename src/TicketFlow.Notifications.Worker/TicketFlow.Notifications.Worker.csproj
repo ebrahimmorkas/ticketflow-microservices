@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicketFlow.BuildingBlocks\TicketFlow.BuildingBlocks.csproj" />
+    <ProjectReference Include="..\TicketFlow.Contracts\TicketFlow.Contracts.csproj" />
+    <ProjectReference Include="..\TicketFlow.ServiceDefaults\TicketFlow.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="TicketFlow.Notifications.UnitTests" />
+  </ItemGroup>
+
+</Project>
