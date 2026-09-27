@@ -8,6 +8,7 @@ var postgres = builder.AddPostgres("postgres")
 
 var eventsDb = postgres.AddDatabase("eventsdb");
 var bookingDb = postgres.AddDatabase("bookingdb");
+var paymentsDb = postgres.AddDatabase("paymentsdb");
 
 var messaging = builder.AddRabbitMQ("messaging")
     .WithManagementPlugin()
@@ -24,6 +25,12 @@ builder.AddProject<Projects.TicketFlow_Booking_Api>("booking-api")
     .WithReference(bookingDb)
     .WithReference(messaging)
     .WaitFor(bookingDb)
+    .WaitFor(messaging);
+
+builder.AddProject<Projects.TicketFlow_Payments_Api>("payments-api")
+    .WithReference(paymentsDb)
+    .WithReference(messaging)
+    .WaitFor(paymentsDb)
     .WaitFor(messaging);
 
 builder.Build().Run();
