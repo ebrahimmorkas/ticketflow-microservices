@@ -1,6 +1,7 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using TicketFlow.Booking.Api.Domain;
+using TicketFlow.Booking.Api.Saga;
 using BookingEntity = TicketFlow.Booking.Api.Domain.Booking;
 
 namespace TicketFlow.Booking.Api.Data;
@@ -44,6 +45,8 @@ public sealed class BookingDbContext(DbContextOptions<BookingDbContext> options)
             b.HasIndex(x => x.EventId);
             b.HasIndex(x => x.CustomerEmail);
         });
+
+        new BookingStateMap().Configure(modelBuilder);
 
         modelBuilder.AddTransactionalOutboxEntities();
     }
