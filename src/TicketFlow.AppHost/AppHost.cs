@@ -19,18 +19,21 @@ var mailpit = builder.AddMailPit("mailpit");
 
 // ---------- services ----------
 var eventsApi = builder.AddProject<Projects.TicketFlow_Events_Api>("events-api")
+    .WithHttpHealthCheck("/health")
     .WithReference(eventsDb)
     .WithReference(messaging)
     .WaitFor(eventsDb)
     .WaitFor(messaging);
 
 var bookingApi = builder.AddProject<Projects.TicketFlow_Booking_Api>("booking-api")
+    .WithHttpHealthCheck("/health")
     .WithReference(bookingDb)
     .WithReference(messaging)
     .WaitFor(bookingDb)
     .WaitFor(messaging);
 
 var paymentsApi = builder.AddProject<Projects.TicketFlow_Payments_Api>("payments-api")
+    .WithHttpHealthCheck("/health")
     .WithReference(paymentsDb)
     .WithReference(messaging)
     .WaitFor(paymentsDb)
@@ -44,6 +47,7 @@ builder.AddProject<Projects.TicketFlow_Notifications_Worker>("notifications-work
 
 // Single public entry point; the individual services are not exposed externally.
 builder.AddProject<Projects.TicketFlow_Gateway>("gateway")
+    .WithHttpHealthCheck("/health")
     .WithReference(eventsApi)
     .WithReference(bookingApi)
     .WithReference(paymentsApi)
