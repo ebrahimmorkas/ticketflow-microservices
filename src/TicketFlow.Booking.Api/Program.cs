@@ -1,8 +1,10 @@
 using FluentValidation;
+using MassTransit;
 using Scalar.AspNetCore;
 using TicketFlow.Booking.Api.Consumers;
 using TicketFlow.Booking.Api.Data;
 using TicketFlow.Booking.Api.Features;
+using TicketFlow.Booking.Api.Saga;
 using TicketFlow.BuildingBlocks.Messaging;
 using TicketFlow.BuildingBlocks.Persistence;
 
@@ -14,6 +16,16 @@ builder.AddMessaging<BookingDbContext>(bus =>
 {
     bus.AddConsumer<EventPublishedConsumer>();
     bus.AddConsumer<EventCancelledConsumer>();
+    bus.AddConsumer<BookingConfirmedConsumer>();
+    bus.AddConsumer<BookingCancelledConsumer>();
+
+    bus.AddSagaStateMachine<BookingStateMachine, BookingState>()
+        .EntityFrameworkRepository(repository =>
+        {
+            repository.ExistingDbContext<BookingDbContext>();
+            repository.UsePostgres();
+            repository.ConcurrencyMode = ConcurrencyMode.Optimistic;
+        });
 });
 
 builder.Services.AddSingleton(TimeProvider.System);
