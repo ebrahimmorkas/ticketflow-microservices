@@ -6,4 +6,13 @@
     <UserSecretsId>ticketflow-apphost</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicketFlow.Events.Api\TicketFlow.Events.Api.csproj" />
+  </ItemGroup>
+
 </Project>
