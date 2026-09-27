@@ -12,6 +12,7 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/TicketFlow.Booking.UnitTests/TicketFlow.Booking.UnitTests.csproj" />
+    <Project Path="tests/TicketFlow.EndToEndTests/TicketFlow.EndToEndTests.csproj" />
     <Project Path="tests/TicketFlow.Events.UnitTests/TicketFlow.Events.UnitTests.csproj" />
     <Project Path="tests/TicketFlow.Gateway.UnitTests/TicketFlow.Gateway.UnitTests.csproj" />
     <Project Path="tests/TicketFlow.Notifications.UnitTests/TicketFlow.Notifications.UnitTests.csproj" />
