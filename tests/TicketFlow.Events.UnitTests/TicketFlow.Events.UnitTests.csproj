@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TicketFlow.Events.Api\TicketFlow.Events.Api.csproj" />
+  </ItemGroup>
+
+</Project>
