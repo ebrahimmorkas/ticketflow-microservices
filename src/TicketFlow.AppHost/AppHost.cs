@@ -18,19 +18,19 @@ var messaging = builder.AddRabbitMQ("messaging")
 var mailpit = builder.AddMailPit("mailpit");
 
 // ---------- services ----------
-builder.AddProject<Projects.TicketFlow_Events_Api>("events-api")
+var eventsApi = builder.AddProject<Projects.TicketFlow_Events_Api>("events-api")
     .WithReference(eventsDb)
     .WithReference(messaging)
     .WaitFor(eventsDb)
     .WaitFor(messaging);
 
-builder.AddProject<Projects.TicketFlow_Booking_Api>("booking-api")
+var bookingApi = builder.AddProject<Projects.TicketFlow_Booking_Api>("booking-api")
     .WithReference(bookingDb)
     .WithReference(messaging)
     .WaitFor(bookingDb)
     .WaitFor(messaging);
 
-builder.AddProject<Projects.TicketFlow_Payments_Api>("payments-api")
+var paymentsApi = builder.AddProject<Projects.TicketFlow_Payments_Api>("payments-api")
     .WithReference(paymentsDb)
     .WithReference(messaging)
     .WaitFor(paymentsDb)
@@ -41,5 +41,15 @@ builder.AddProject<Projects.TicketFlow_Notifications_Worker>("notifications-work
     .WithReference(mailpit)
     .WaitFor(messaging)
     .WaitFor(mailpit);
+
+// Single public entry point; the individual services are not exposed externally.
+builder.AddProject<Projects.TicketFlow_Gateway>("gateway")
+    .WithReference(eventsApi)
+    .WithReference(bookingApi)
+    .WithReference(paymentsApi)
+    .WaitFor(eventsApi)
+    .WaitFor(bookingApi)
+    .WaitFor(paymentsApi)
+    .WithExternalHttpEndpoints();
 
 builder.Build().Run();
