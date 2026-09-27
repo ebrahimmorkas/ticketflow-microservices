@@ -1,12 +1,14 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/TicketFlow.AppHost/TicketFlow.AppHost.csproj" />
+    <Project Path="src/TicketFlow.Booking.Api/TicketFlow.Booking.Api.csproj" />
     <Project Path="src/TicketFlow.BuildingBlocks/TicketFlow.BuildingBlocks.csproj" />
     <Project Path="src/TicketFlow.Contracts/TicketFlow.Contracts.csproj" />
     <Project Path="src/TicketFlow.Events.Api/TicketFlow.Events.Api.csproj" />
     <Project Path="src/TicketFlow.ServiceDefaults/TicketFlow.ServiceDefaults.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/TicketFlow.Booking.UnitTests/TicketFlow.Booking.UnitTests.csproj" />
     <Project Path="tests/TicketFlow.Events.UnitTests/TicketFlow.Events.UnitTests.csproj" />
   </Folder>
 </Solution>
