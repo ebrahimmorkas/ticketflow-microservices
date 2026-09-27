@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TicketFlow.AppHost/TicketFlow.AppHost.csproj" />
+    <Project Path="src/TicketFlow.ServiceDefaults/TicketFlow.ServiceDefaults.csproj" />
+  </Folder>
+</Solution>
