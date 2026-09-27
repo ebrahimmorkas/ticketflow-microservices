@@ -41,6 +41,7 @@ public sealed class ProcessPaymentConsumerTests : IAsyncDisposable
         await _harness.Bus.Publish(new ProcessPayment(bookingId, "fan@example.com", 80m, "USD"), TestContext.Current.CancellationToken);
 
         (await _harness.Published.Any<PaymentSucceeded>(x => x.Context.Message.BookingId == bookingId, TestContext.Current.CancellationToken)).ShouldBeTrue();
+        await WaitForConsumerAsync();
         (await GetPaymentsAsync(bookingId)).ShouldHaveSingleItem().Status.ShouldBe(PaymentStatus.Succeeded);
     }
 
@@ -53,6 +54,7 @@ public sealed class ProcessPaymentConsumerTests : IAsyncDisposable
         await _harness.Bus.Publish(new ProcessPayment(bookingId, "fan+decline@example.com", 80m, "USD"), TestContext.Current.CancellationToken);
 
         (await _harness.Published.Any<PaymentFailed>(x => x.Context.Message.BookingId == bookingId, TestContext.Current.CancellationToken)).ShouldBeTrue();
+        await WaitForConsumerAsync();
         var payment = (await GetPaymentsAsync(bookingId)).ShouldHaveSingleItem();
         payment.Status.ShouldBe(PaymentStatus.Failed);
         payment.FailureReason.ShouldBe("Card declined by issuer.");
@@ -87,6 +89,11 @@ public sealed class ProcessPaymentConsumerTests : IAsyncDisposable
 
         result.Approved.ShouldBe(approved);
     }
+
+    // The harness records a Publish as soon as it happens, which (without the outbox used in production)
+    // is before SaveChanges. Waiting for the consume to finish avoids reading the database too early.
+    private async Task WaitForConsumerAsync() =>
+        (await _harness.GetConsumerHarness<ProcessPaymentConsumer>().Consumed.Any<ProcessPayment>(TestContext.Current.CancellationToken)).ShouldBeTrue();
 
     private async Task<List<Payment>> GetPaymentsAsync(Guid bookingId)
     {
